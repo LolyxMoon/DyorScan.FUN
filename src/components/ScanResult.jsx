@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 
 // Loading indicator for streaming sections
 function SectionLoader({ text = "Generating..." }) {
@@ -153,7 +151,6 @@ function ScanResult({ result }) {
   } = result;
 
   const [copySuccess, setCopySuccess] = useState(false);
-  const [downloadingPDF, setDownloadingPDF] = useState(false);
 
   const formatFullReport = () => {
     let report = `DYOR SCAN REPORT\n`;
@@ -241,56 +238,6 @@ function ScanResult({ result }) {
       setTimeout(() => setCopySuccess(false), 2000);
     } catch (err) {
       console.error("Failed to copy:", err);
-    }
-  };
-
-  const handleDownloadPDF = async () => {
-    setDownloadingPDF(true);
-    try {
-      const element = document.querySelector('.scan-result');
-      if (!element) {
-        throw new Error("Report element not found");
-      }
-
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        backgroundColor: '#0d0d0d',
-        logging: false,
-        useCORS: true,
-        windowWidth: element.scrollWidth,
-        windowHeight: element.scrollHeight,
-      });
-      
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      const ratio = Math.min((pdfWidth - 20) / imgWidth, (pdfHeight - 20) / imgHeight);
-      
-      let heightLeft = imgHeight * ratio;
-      let position = 10;
-      
-      pdf.addImage(imgData, 'PNG', 10, position, imgWidth * ratio, imgHeight * ratio);
-      heightLeft -= (pdfHeight - 20);
-      
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight * ratio + 10;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 10, position, imgWidth * ratio, imgHeight * ratio);
-        heightLeft -= (pdfHeight - 20);
-      }
-      
-      const fileName = `${(tokenName || 'token').replace(/\s+/g, '_')}_${(symbol || 'scan').replace(/[^a-zA-Z0-9]/g, '')}_${new Date().toISOString().split('T')[0]}.pdf`;
-      pdf.save(fileName);
-      
-      setTimeout(() => setDownloadingPDF(false), 1000);
-    } catch (err) {
-      console.error("Failed to generate PDF:", err);
-      alert("Failed to generate PDF. Please try again.");
-      setDownloadingPDF(false);
     }
   };
 
@@ -399,9 +346,6 @@ function ScanResult({ result }) {
         </a>
         <button onClick={handleCopyReport} className="btn-copy-report">
           {copySuccess ? "✓ Copied!" : "📋 Copy Report"}
-        </button>
-        <button onClick={handleDownloadPDF} className="btn-download-pdf" disabled={downloadingPDF}>
-          {downloadingPDF ? "⏳ Generating..." : "📄 Download PDF"}
         </button>
       </div>
 
