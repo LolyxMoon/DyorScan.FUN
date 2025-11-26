@@ -1,5 +1,5 @@
 # DYOR Scanner
-
+<a href="https://freeimage.host/"><img src="https://iili.io/fqDw9ft.png" alt="fqDw9ft.png" border="0" /></a>
 AI-powered token narrative verification tool for Solana. Analyze token claims, verify narratives, and assess risks before investing.
 
 ## Overview
