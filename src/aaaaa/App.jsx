@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, useNavigate } from "react-router-dom";
 import ScanForm from "./components/ScanForm.jsx";
 import ScanResult from "./components/ScanResult.jsx";
-import UnicornBackground from "./components/UnicornBackground.jsx";
 import Documentation from "./pages/Documentation.jsx";
 import ApiKeys from "./pages/ApiKeys.jsx";
 
@@ -194,7 +193,6 @@ function AppContent() {
 
   return (
     <div className="app">
-      <UnicornBackground />
       <header className="site-header">
         <div className="site-header-content">
           <Link to="/" className="logo">
@@ -209,7 +207,7 @@ function AppContent() {
           </nav>
 
           <div className="site-header-actions">
-            <a href="https://x.com/dyorhub" target="_blank" rel="noopener noreferrer" className="social-link">
+            <a href="https://x.com/DyorScanFun" target="_blank" rel="noopener noreferrer" className="social-link">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
               </svg>
