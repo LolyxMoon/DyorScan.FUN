@@ -5,6 +5,7 @@ import ScanResult from "./components/ScanResult.jsx";
 import UnicornBackground from "./components/UnicornBackground.jsx";
 import Documentation from "./pages/Documentation.jsx";
 import ApiKeys from "./pages/ApiKeys.jsx";
+import CodeAnalyzer from "./pages/CodeAnalyzer.jsx";
 
 const loadingMessages = [
   "Analyzing contract data...",
@@ -58,7 +59,7 @@ function AppContent() {
     const scrollToElement = () => {
       const element = howItWorksRef.current || document.getElementById('how-it-works');
       if (element) {
-        const headerOffset = 80; // Account for fixed header
+        const headerOffset = 80;
         const elementPosition = element.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
         
@@ -70,11 +71,9 @@ function AppContent() {
     };
     
     if (location.pathname !== '/') {
-      // Navigate to home first, then scroll after a delay
       navigate('/');
       setTimeout(scrollToElement, 500);
     } else {
-      // Already on home page, scroll immediately
       scrollToElement();
     }
   };
@@ -203,88 +202,79 @@ function AppContent() {
           </Link>
           <nav className="site-nav">
             <Link to="/" className={location.pathname === '/' ? 'active' : ''}>Home</Link>
+            <Link to="/code-analyzer" className={location.pathname.startsWith('/code-analyzer') ? 'active' : ''}>Code Analyzer</Link>
             <Link to="/docs" className={location.pathname === '/docs' ? 'active' : ''}>Documentation</Link>
             <a href="#how-it-works" onClick={scrollToHowItWorks}>How It Works</a>
             <Link to="/api-keys" className={location.pathname === '/api-keys' ? 'active' : ''}>API</Link>
           </nav>
 
           <div className="site-header-actions">
-            <a href="https://x.com/dyorscanfun" target="_blank" rel="noopener noreferrer" className="social-link">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-              </svg>
-            </a>
-            <a href="https://github.com/DyorScanFUN" target="_blank" rel="noopener noreferrer" className="social-link">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-              </svg>
-            </a>
-            <button onClick={scrollToScan} className="btn-scan-header">Scan Token</button>
+            <Link to="/code-analyzer" className="btn-secondary">
+              ⚡ Code Analyzer
+            </Link>
           </div>
         </div>
       </header>
 
-      <main className="app-main">
+      <main className="main-content">
         <section className="hero-section">
           <div className="hero-content">
-            <div className="hero-badge">CA: </div>
-            <h1 className="hero-title">Verify Token Narratives<br/>Before You Invest</h1>
-            <p className="hero-subtitle">AI-powered analysis that extracts claims, identifies entities, and verifies narratives from Solana and BNB token data. Make informed decisions with real-time market intelligence.</p>
-            
-            <div className="hero-scanner">
-              <ScanForm onScan={handleScan} loading={loading} />
-              
-              {loading && (
-                <div className="loading-state">
-                  <div className="loading-spinner"></div>
-                  <p className="loading-message">{loadingMessage}</p>
-                </div>
-              )}
-
-              {errorMsg && <div className="error">{errorMsg}</div>}
+            <h1 className="hero-title">
+              <span className="gradient-text">Verify Token Narratives</span>
+              <br />
+              Before You Invest
+            </h1>
+            <p className="hero-description">
+              AI-powered token analysis that extracts claims, verifies narratives, 
+              and assesses risks. Get comprehensive intelligence on any Solana or BNB token in seconds.
+            </p>
+            <div className="hero-buttons">
+              <button onClick={scrollToScan} className="btn-primary">
+                Scan Token
+              </button>
+              <Link to="/code-analyzer" className="btn-outline">
+                ⚡ Analyze Code
+              </Link>
             </div>
           </div>
+
           <div className="hero-visual">
             {result ? (
-              <div className="hero-result">
-                <ScanResult result={result} />
-              </div>
+              <ScanResult result={result} />
             ) : (
-              <div className="scanner-preview">
+              <div className="preview-card">
                 <div className="preview-header">
-                  <div className="preview-title">What We Analyze</div>
-                  <div className="preview-subtitle">Real-time insights from multiple sources</div>
+                  <div className="preview-title">Sample Analysis</div>
+                  <div className="preview-badge-container">
+                    <span className="preview-badge confirmed">AI Verified</span>
+                  </div>
                 </div>
-                
-                <div className="preview-items">
+
+                <div className="preview-content-grid">
                   <div className="preview-item">
                     <div className="preview-icon">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                        <polyline points="14 2 14 8 20 8"></polyline>
-                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                        <polyline points="10 9 9 9 8 9"></polyline>
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path>
                       </svg>
                     </div>
                     <div className="preview-content">
-                      <div className="preview-label">Narrative</div>
-                      <div className="preview-detail">AI-powered claim verification</div>
+                      <div className="preview-label">Narrative Extraction</div>
+                      <div className="preview-detail">AI-powered claim identification</div>
                     </div>
                   </div>
 
                   <div className="preview-item">
                     <div className="preview-icon">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
                       </svg>
                     </div>
                     <div className="preview-content">
-                      <div className="preview-label">Social Presence</div>
-                      <div className="preview-detail">Twitter, Telegram & website activity</div>
+                      <div className="preview-label">Reality Check</div>
+                      <div className="preview-detail">Verified against real data</div>
                     </div>
                   </div>
 
@@ -295,21 +285,8 @@ function AppContent() {
                       </svg>
                     </div>
                     <div className="preview-content">
-                      <div className="preview-label">Security Check</div>
-                      <div className="preview-detail">Mint authority, freeze risks & red flags</div>
-                    </div>
-                  </div>
-
-                  <div className="preview-item">
-                    <div className="preview-icon">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                        <polyline points="17 6 23 6 23 12"></polyline>
-                      </svg>
-                    </div>
-                    <div className="preview-content">
-                      <div className="preview-label">Hype Meter</div>
-                      <div className="preview-detail">Community sentiment & momentum</div>
+                      <div className="preview-label">Security Scan</div>
+                      <div className="preview-detail">Risk assessment & red flags</div>
                     </div>
                   </div>
 
@@ -366,9 +343,10 @@ function AppContent() {
               <p>GPT-4 powered classification system that evaluates narratives as CONFIRMED, PARTIAL, or UNVERIFIED with detailed reasoning.</p>
             </div>
             
-            <div className="feature-card">
-              <h3>Social Tracking</h3>
-              <p>Aggregate social links including websites, Twitter, and Telegram. Monitor community presence and engagement.</p>
+            <div className="feature-card highlight-card">
+              <h3>⚡ Code Analyzer</h3>
+              <p>NEW: Analyze any GitHub repository with AI. Understand architecture, find security issues, and chat with code.</p>
+              <Link to="/code-analyzer" className="feature-link">Try it now →</Link>
             </div>
             
             <div className="feature-card">
@@ -496,6 +474,7 @@ function AppContent() {
           </div>
           <div className="app-footer-links">
             <Link to="/">Home</Link>
+            <Link to="/code-analyzer">Code Analyzer</Link>
             <Link to="/docs">Documentation</Link>
             <a href="#how-it-works" onClick={scrollToHowItWorks}>How It Works</a>
             <a href="https://github.com/DyorScanFUN" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -515,6 +494,8 @@ function App() {
       <Routes>
         <Route path="/docs" element={<Documentation />} />
         <Route path="/api-keys" element={<ApiKeys />} />
+        <Route path="/code-analyzer" element={<CodeAnalyzer />} />
+        <Route path="/code-analyzer/:owner/:repo" element={<CodeAnalyzer />} />
         <Route path="/" element={<AppContent />} />
       </Routes>
     </Router>
