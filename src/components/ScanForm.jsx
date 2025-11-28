@@ -1,8 +1,32 @@
-// Stub component - replace with your actual ScanForm
-export default function ScanForm({ onScan }) {
+import React, { useState } from "react";
+
+function ScanForm({ onScan, loading }) {
+  const [contractAddress, setContractAddress] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!contractAddress.trim()) return;
+    onScan(contractAddress.trim());
+  };
+
   return (
-    <div className="p-4">
-      <p className="text-gray-400">ScanForm placeholder</p>
-    </div>
+    <form className="scan-form" onSubmit={handleSubmit}>
+      <label>
+        Contract address
+        <input
+          type="text"
+          placeholder="Paste BNB contract address..."
+          value={contractAddress}
+          onChange={(e) => setContractAddress(e.target.value)}
+        />
+      </label>
+
+      <button type="submit" disabled={loading}>
+        {loading ? "Scanning..." : "Scan"}
+      </button>
+    </form>
   );
 }
+
+export default ScanForm;
+
